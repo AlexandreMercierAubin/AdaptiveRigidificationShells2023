@@ -66,3 +66,7 @@ Please cite us when using this simulator in your own research.
 Special thanks to the collaborators Alexander Winter, David IW Levin and Paul Kry who participated in creating this simulator.
 This simulator is now used by many students of the McGill physics-based animation lab .
 We wish to keep expanding it over time.
+
+Some 3D models were inspired and modified from the arcsim provided files.
+Some of the animation files like the dancer MOT script come from there too.
+http://graphics.berkeley.edu/resources/ARCSim/

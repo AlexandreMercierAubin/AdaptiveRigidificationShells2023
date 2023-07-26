@@ -1,0 +1,133 @@
+clear;
+close all;
+cla;
+h = 0.005; % time step
+
+% CONFIG
+settings = Simulation3DSettings();
+
+% MESHES
+rho = 1;
+nu = 0.38;      % Poisson ratio: close to 0.5 for rubber
+E = 1e4;     % Young's modulus: 0.01e9 approximate for rubber
+[ mu, lambda ] = toLame( nu, E );
+alpha0 = 0.0005;   % Rayleigh factor on M
+alpha1 = 0.0001;  % Rayleigh factor on K
+thickness = 0.02;
+strainUpperBound = 1.3;
+strainLowerBound = 0.7;
+color = [0.3,0.46,0.8];
+ka = 1;
+kl = 5; 
+tMaterial = [TriangleMaterial(rho, mu, lambda, alpha0, alpha1, [0.3,0.46,0.8], strainUpperBound, strainLowerBound, thickness, kl, ka)];
+
+%TOP
+rho = 2;
+ka2 = 10;
+kl2 = 50; 
+thickness = 0.1;
+nu2 = 0.4;      % Poisson ratio: close to 0.5 for rubber
+E2 = 5e4;
+[ mu2, lambda2 ] = toLame( nu2, E2 );
+alpha0 = 0.005;   % Rayleigh factor on M
+alpha1 = 0.0001;  % Rayleigh factor on K
+tMaterial2 = [TriangleMaterial(rho, mu2, lambda2, alpha0, alpha1, [0.3,0.2,0.8], strainUpperBound, strainLowerBound, thickness, kl2, ka2)];
+tMaterial= [tMaterial,tMaterial2];
+
+
+resetMesh = true;
+mesh3D = shellOBJLoader('hathd',[],tMaterial,[0.5,0.5,0.5],resetMesh,settings);
+
+
+v = reshape(mesh3D.p,3,[]);
+n1 = v( :, mesh3D.t(:,1) );
+n2 = v( :, mesh3D.t(:,2) );
+n3 = v( :, mesh3D.t(:,3) );
+elCenter = (1/3) * (n1+n2+n3);
+% The .24 here is because it doesn't quite sit on the y axis... small shift
+% in the z direction.
+dfromyaxis = sqrt(sum((elCenter([1,3],:)-[0;0.05]).^2, 1));
+dfromyaxis2 = sqrt(sum((elCenter([1,3],:)-[0;-0.1]).^2, 1));
+rthresh = 0.3;
+rthresh2 = 0.34;
+% find the bits away from the core, and avoid the boxes on the side of teh
+% rocket or other features that are too far off the centerline
+ind =  (dfromyaxis > rthresh  & abs(elCenter(2,:))<1) &(dfromyaxis2 > rthresh2 & abs(elCenter(2,:))<1); % this is inverted as they are doubles, not logical
+
+attributes = mesh3D.materialIndex;
+attributes(ind) = 2;
+mesh3D.updateMaterials( attributes, tMaterial );
+
+% generateCloth([], tMaterial, 0.1);
+mesh3D.setRigidTransform([70,30,0],[0,0,0.4],true);
+mesh3D.renderOffset = [2,0,0];
+% pinning tris
+mesh3Da = AdaptiveMesh3D(mesh3D);
+mesh3Da.renderOffset = [0,0,0];
+
+mesh3DaCG = AdaptiveMesh3D(mesh3D);
+mesh3DaCG.renderOffset = [-2,0,0];
+mesh3DaOG = AdaptiveMesh3D(mesh3D);
+mesh3DaOG.renderOffset = [-4,0,0];
+
+rigidificator = ECurvCloth3DRigidificator();
+rigidificator.RigidificationThreshold = 1e-3;
+rigidificator.ElastificationThreshold = 1e-2; 
+rigidificator.setBendingThresholdsFromPlanar();
+rigidificator.bendType = 2;
+
+% integrator = FullNewton3D();
+% integrator = FullNewtonLinearized3D();
+% integrator.maxIterations = 5;
+integrator = LDLBackwardEuler3D();
+integrator.Gravity = -9.8;
+integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
+
+integrator2 = LDLBackwardEuler3D();
+integrator2.Gravity = -9.8;
+integrator2.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
+integrator2.useQuicksolveContactFilter = 2; %CG warmstart
+
+integrator3 = LDLBackwardEuler3D();
+integrator3.Gravity = -9.8;
+integrator3.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
+integrator3.useQuicksolveContactFilter = 3; %no new contact warmstart
+
+integrator4 = LDLBackwardEuler3D();
+integrator4.Gravity = -9.8;
+integrator4.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
+
+energyModel = StVenantKirchoff3DEnergy();
+% energyModel = CorotationalEnergy();
+% energyModel = NeoHookean3DEnergy();
+
+planeContactFinder = PlaneContactFinder3D([0,0,1], [0,0,-0.2], 0.3);
+contactFinder = {planeContactFinder};
+
+% settings.MakeVideo = 1;
+settings.FramesToRecord = 4.2/h; %time in seconds scaled by h
+% settings.PlotEDotHist = 1;
+settings.SceneName = 'hat';
+settings.OBJDir = './objs/hat/';
+% settings.WriteOBJs = true;
+% settings.addShellNormalDeformation = 1;
+settings.campos=[8,3,1.75];
+% settings.StrainLimitingEnabled = true;
+settings.addBendingEnergy = 1;
+
+settings.recomputeCacheAinv = true;
+% settings.RigidificationEnabled = false;
+% settings.PlotEdotVsCurvatureHists = true;
+% settings.RigidificationEnabled = false;
+settings.PGSiterations = 15;
+settings.useGrinspunPlanarEnergy = true;
+% settings.PlotSkip = plotSkip60FPS(h);
+
+% settings.PCGiterations = 100;
+% settings.quicksolveSimulation = true;
+% integrator.useFullContactAinv = true;
+
+td = simulate3D({mesh3Da,mesh3DaCG,mesh3DaOG,mesh3D,},h,contactFinder, {integrator,integrator2,integrator3,integrator4}, rigidificator, settings, energyModel);%
+save("hat_"+datestr(now,'mm-dd-yyyy_HH-MM')+".mat", 'td');
+writeTDcsv(td, "hat", ["_adaptiveFilter","_adaptiveCG","_adaptiveOG","_default"]);
+readTDcsvLog(["hat_default.csv","hat_adaptiveFilter.csv"],["blue","#FF6600"],-1,h);

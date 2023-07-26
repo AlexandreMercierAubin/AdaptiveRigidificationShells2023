@@ -4,7 +4,7 @@ Matlab code for the adaptive rigidification project. This code base provides an 
 Note that this is not meant for production, it could be more optimized, and there could be some hidden bugs.
 Please do create a pull request if you find any.
 
-The paper and a few useful videos are available on my website https://www.alexandremercieraubin.com/Work/papers/AdaptiveRigidificationShells/.
+The paper and a few useful videos are available on my website https://www.alexandremercieraubin.com/Work/papers/AdaptiveRigidificationShells/
 
 ## How to use
 

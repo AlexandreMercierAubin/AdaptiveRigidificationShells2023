@@ -21,6 +21,8 @@ objs/*
 !*Builder*
 *.mat
 *.csv
+*.obj
+*.mtl
 2d/data/cached/*
 3d/data/cached/*
 !2d/data/cached/readme.txt

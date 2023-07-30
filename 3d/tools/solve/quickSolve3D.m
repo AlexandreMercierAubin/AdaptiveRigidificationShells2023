@@ -200,7 +200,9 @@ function quickSolve3D( cache, integrator, mesh3D, h, Jc, phi, settings, animatio
 
                 filterCenterWeight = 1;
                 if integrator.useQuicksolveContactFilter == 7
-                    filterCenterWeight = 4;
+                    %this assumes the mesh is mostly regular and
+                    %approximates the filter center as the max valance
+                    filterCenterWeight = max(groupcounts(neighborLambdaID));
                 end
 
                 contactDv = JcnUp'*([filterCenterWeight*newLambdas;weightedLambdas]);

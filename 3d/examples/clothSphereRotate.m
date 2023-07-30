@@ -38,17 +38,9 @@ rigidificator.ElastificationBendThreshold = 5e1;
 
 integrator = LDLBackwardEuler3D();
 integrator.useQuicksolveContactFilter = 4;
-% integrator = BackwardEuler3D();
-% integrator = FullNewton3D();
-% integrator.maxIterations = 5;
-% integrator.useFullAinv = true;
 integrator.Gravity = -9.8;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0,0 );
-% integrator.projectToSPD = true;
-% integrator.useFullAinv = true;
-% energyModel = StVenantKirchoff3DEnergy();
 energyModel = NeoHookean3DEnergy();
-% energyModel = CorotationalEnergy();
 
 sphereContactFinder = MovingSphereContactFinder(0.4, [0,-0.3,-0.45], 0.9,h);
 sphereContactFinder.plotRatio = 0.95;
@@ -66,9 +58,7 @@ contactFinder = {sphereContactFinder,planeContactFinder,trapezoidCF};%
 settings.MakeVideo = 1;
 settings.FramesToRecord = 3500;
 
-% settings.InitialWindowPosition = [0,0,1920,1080];
 settings.SceneName = 'clothSphereRotate';
-% settings.WriteOBJs = true;
 settings.OBJDir = './objs/clothSphereRotate/';
 settings.campos=[5,5,2];
 settings.PGSiterations = 20;

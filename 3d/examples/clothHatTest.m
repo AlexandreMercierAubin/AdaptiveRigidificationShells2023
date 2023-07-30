@@ -76,34 +76,20 @@ integrator4.Gravity = -9.8;
 integrator4.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
-% energyModel = NeoHookean3DEnergy();
 
 planeContactFinder = PlaneContactFinder3D([0,0,1], [0,0,-0.2], 0.0);
 contactFinder = {planeContactFinder};
 
-% settings.MakeVideo = 1;
 settings.FramesToRecord = 4.2/h; %time in seconds scaled by h
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'hat';
 settings.OBJDir = './objs/hat/';
-% settings.WriteOBJs = true;
-% settings.addShellNormalDeformation = 1;
 settings.campos=[8,3,1.75];
-% settings.StrainLimitingEnabled = true;
 settings.addBendingEnergy = 1;
 
 settings.recomputeCacheAinv = true;
-% settings.RigidificationEnabled = false;
-% settings.PlotEdotVsCurvatureHists = true;
-% settings.RigidificationEnabled = false;
 settings.PGSiterations = 15;
 settings.useGrinspunPlanarEnergy = true;
-% settings.PlotSkip = plotSkip60FPS(h);
 settings.PCGiterations = 2;
-% settings.PCGiterations = 100;
-% settings.quicksolveSimulation = true;
-% integrator.useFullContactAinv = true;
 
 td = simulate3D({mesh3Da},h,contactFinder, {integrator4}, rigidificator, settings, energyModel);%
 save("hat_"+datestr(now,'mm-dd-yyyy_HH-MM')+".mat", 'td');

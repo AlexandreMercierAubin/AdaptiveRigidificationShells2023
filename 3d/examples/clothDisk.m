@@ -23,7 +23,6 @@ tMaterial = [TriangleMaterial(rho, mu, lambda, alpha0, alpha1,[0.3,0.3,0.7],stra
 
 resetMesh = true;
 mesh3D = shellOBJLoader('disk',[],tMaterial,[0.5,0.5,0.5],resetMesh,settings);
-% generateCloth([], tMaterial, 0.1);
 mesh3D.setRigidTransform([60,0,0],[0,0,1]);
 
 % pinning tris
@@ -35,39 +34,25 @@ rigidificator.ElastificationThreshold = 5e-3;
 rigidificator.setBendingThresholdsFromPlanar();
 
 integrator = LDLBackwardEuler3D();
-% integrator = BackwardEuler3D();
-% integrator.regularizator = 1;
-% integrator = FullNewton3D();
 integrator.Gravity = -9.8;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.0001, 0.0001);
 
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
-% energyModel = NeoHookean3DEnergy();
 
 planeContactFinder = PlaneContactFinder3D([0,0,1], [0,0,-0.2], 0.2);
 contactFinder = {planeContactFinder};
 
 settings.MakeVideo = 1;
-% settings.FramesToRecord = 2000;
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'disk';
-% settings.addShellNormalDeformation = 1;
 settings.campos=[5,-2,.75];
-% settings.StrainLimitingEnabled = true;
 settings.addBendingEnergy = 1;
-% settings.DrawContact = true;
-% settings.PCGiterations = 1;
 settings.useGrinspunPlanarEnergy = true;
 settings.PGSiterations = 30;
 
-% settings.quicksolveSimulation = true;
-% settings.PCGiterations = 100;
-% integrator.PGSquicksolve = true;
-% integrator.separateQuicksolveGravity = false;
 integrator.useFullAinv = true;
 integrator.useFullContactAinv = true;
+integrator.useQuicksolveContactFilter = 7;
 settings.recomputeCacheAinv = true;
 
 simulate3D(mesh3Da,h,contactFinder, integrator, rigidificator, settings, energyModel);

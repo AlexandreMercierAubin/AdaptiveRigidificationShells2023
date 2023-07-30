@@ -43,7 +43,6 @@ min_I = find(xPos <= min(xPos)+0.1 & unpinEnds);
 mesh3D.pin(sort(max_I));
 mesh3D.pin(sort(min_I));
 
-% animScripted = NullAnimationScript();
 animScripted = SequentialPositionAnimationScripter();
 animScripted.dim = 3;
 
@@ -51,8 +50,6 @@ dofs = [min_I*3-2;max_I*3-2];
 halfSize= size(dofs,1);
 dofsCompress = [min_I*3-1;max_I*3-1];
 dofs = [dofs;dofsCompress];
-%shrink the pinned dofs a little
-% baseMesh.p(dofs+1) = baseMesh.p(dofs+1)*0.9995;
 
 %creates the animated ends
 compressFactor = 1;
@@ -86,8 +83,6 @@ rigidificator.RigidificationThreshold = 0.05;
 rigidificator.ElastificationThreshold = 1; 
 rigidificator.setBendingThresholdsFromPlanar();
 integrator = LDLBackwardEuler3D();
-% integrator = FullNewton3D();
-% integrator.maxIterations = 5;
 integrator.recordConditionNumber = true;
 integrator.Gravity = 0;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.1,0.1 );
@@ -96,25 +91,13 @@ energyModel = StVenantKirchoff3DEnergy();
 contactFinder = {};
 
 settings.MakeVideo = 1;
-% settings.PlotSkip = multiplyer-1;
-% settings.FramesToRecord = 2000;
-% settings.PlotEDotHist = 1;
-% settings.InitialWindowPosition = [0,0,1920,1080];
 settings.SceneName = 'WavyCloth';
-% settings.WriteOBJs = true;
 settings.OBJDir = './objs/WavyCloth/';
-% settings.addShellNormalDeformation = 1;
-% settings.StrainLimitingEnabled = true;
 settings.campos=[4,4,5];
 settings.camtarget = [0.3,-0.5,0];
 settings.camLightPosition = 'left';
-% settings.PCGiterations = 200;
-% settings.quicksolveSimulation = true;
 settings.addBendingEnergy = true;
-% settings.RigidificationEnabled = false;
 settings.useGrinspunPlanarEnergy = true;
-% settings.elementLineColor = 'black';
-% settings.camLightStyle = 'local';
 
 simulate3D(mesh3Da,h,contactFinder, integrator, rigidificator, settings, energyModel,animScripted);
 

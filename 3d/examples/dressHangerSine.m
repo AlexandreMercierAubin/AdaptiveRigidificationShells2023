@@ -27,8 +27,6 @@ resetMesh = true;
 mesh3D = shellOBJLoader('dressyellowCoarse',[],tMaterial,[1,1,1],resetMesh,settings);
 mesh3D.setRigidTransform([0,0,90],[0,0,1.2],true);
 
-% baseMesh.pin([1,3,4]);
-
 mesh3Da = AdaptiveMesh3D(mesh3D);
 
 rigidificator = ECurvCloth3DRigidificator();

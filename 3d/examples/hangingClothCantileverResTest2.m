@@ -31,19 +31,6 @@ meshLOW = generateCloth([], tMaterial, resolutionLOW,[1,1,1],[3,1],0,direction);
 meshMED = generateCloth([], tMaterial, resolutionMED,[1,1,1],[3,1],0,direction);
 meshHD = generateCloth([], tMaterial, resolutionHD,[1,1,1],[3,1],0,direction);
 
-% dim = [1,3];
-% sineAlpha = 0;
-% sineFreq = 10;
-% sinePhase = 0;
-% length = 3;
-% meshLOW = generateWavyShell([], tMaterial, 5,length,sineAlpha,sineFreq,sinePhase,[0.5,0.5,0.5]);
-% meshLOW.setRigidTransform([0,90,0],[0,0,0.5],true);
-% meshMED = generateWavyShell([], tMaterial, 10,length,sineAlpha,sineFreq,sinePhase,[0.5,0.5,0.5]);
-% meshMED.setRigidTransform([0,90,0],[0,0,0.5],true);
-% meshHD = generateWavyShell([], tMaterial, 50,length,sineAlpha,sineFreq,sinePhase,[0.5,0.5,0.5]);
-% meshHD.setRigidTransform([0,90,0],[0,0,0.5],true);
-
-
 settings.recomputeCacheAinv = true;
 
 % pinning tris
@@ -68,8 +55,6 @@ meshHD.setRigidTransform([0,90,-90],[0,0,0]);
 meshHD.renderOffset=[1.1,0,0];
 meshaHD = AdaptiveMesh3D(meshHD);
 
-% Et = 5e-2;
-% Rt = 5e-3;
 Et = 999999;
 Rt = 999999;
 Eb = 5e-2;
@@ -124,11 +109,9 @@ settings.FramesToRecord = 30/h;
 settings.SceneName = 'clothResTest2';
 settings.WriteOBJs = true;
 settings.OBJDir = './objs/clothResTest2/';
-% settings.StrainLimitingEnabled = true;
 settings.addBendingEnergy = 1; %Note: the bending energy is very slow to
 % compute with matlab. Using a mex version would speed it up.
 settings.campos=[9,9,2];
-% settings.useGrinspunPlanarEnergy = true;
 settings.addShellNormalDeformation = true;
 
 td = simulate3D({meshaLOW,meshaMED,meshaHD},h,contactFinder, {integrator,integrator2,integrator3}, {rigidificator,rigidificator2,rigidificator3}, settings, energyModel);

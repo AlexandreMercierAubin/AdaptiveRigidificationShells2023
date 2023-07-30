@@ -58,7 +58,6 @@ attributes = mesh3D.materialIndex;
 attributes(ind) = 2;
 mesh3D.updateMaterials( attributes, tMaterial );
 
-% generateCloth([], tMaterial, 0.1);
 mesh3D.setRigidTransform([70,30,0],[0,0,0.4],true);
 mesh3D.renderOffset = [2,0,0];
 % pinning tris
@@ -76,9 +75,6 @@ rigidificator.ElastificationThreshold = 1e-2;
 rigidificator.setBendingThresholdsFromPlanar();
 rigidificator.bendType = 2;
 
-% integrator = FullNewton3D();
-% integrator = FullNewtonLinearized3D();
-% integrator.maxIterations = 5;
 integrator = LDLBackwardEuler3D();
 integrator.Gravity = -9.8;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
@@ -98,34 +94,19 @@ integrator4.Gravity = -9.8;
 integrator4.setComplianceAndBaumgarteFromERPandCFM(h, 0.0, 0.0);
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
-% energyModel = NeoHookean3DEnergy();
 
 planeContactFinder = PlaneContactFinder3D([0,0,1], [0,0,-0.2], 0.3);
 contactFinder = {planeContactFinder};
 
-% settings.MakeVideo = 1;
 settings.FramesToRecord = 4.2/h; %time in seconds scaled by h
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'hat';
 settings.OBJDir = './objs/hat/';
-% settings.WriteOBJs = true;
-% settings.addShellNormalDeformation = 1;
 settings.campos=[8,3,1.75];
-% settings.StrainLimitingEnabled = true;
 settings.addBendingEnergy = 1;
 
 settings.recomputeCacheAinv = true;
-% settings.RigidificationEnabled = false;
-% settings.PlotEdotVsCurvatureHists = true;
-% settings.RigidificationEnabled = false;
 settings.PGSiterations = 15;
 settings.useGrinspunPlanarEnergy = true;
-% settings.PlotSkip = plotSkip60FPS(h);
-
-% settings.PCGiterations = 100;
-% settings.quicksolveSimulation = true;
-% integrator.useFullContactAinv = true;
 
 td = simulate3D({mesh3Da,mesh3DaCG,mesh3DaOG,mesh3D,},h,contactFinder, {integrator,integrator2,integrator3,integrator4}, rigidificator, settings, energyModel);%
 save("hat_"+datestr(now,'mm-dd-yyyy_HH-MM')+".mat", 'td');

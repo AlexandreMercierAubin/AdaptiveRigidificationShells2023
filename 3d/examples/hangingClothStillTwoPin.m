@@ -53,27 +53,21 @@ mesh3Da = AdaptiveMesh3D(mesh3D);
 rigidificator = ECurvCloth3DRigidificator();
 rigidificator.RigidificationThreshold = 1e-4;
 rigidificator.ElastificationThreshold = 5e-3; 
-% rigidificator.PreventPinnedRigidification = true;
 integrator = LDLBackwardEuler3D();
 integrator.recordConditionNumber = true;
 integrator.Gravity = -9.8;
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
 
 NullContactFinder = NullContactFinder(3);
 contactFinder = {NullContactFinder};
 
 settings.StrainLimitingEnabled = false;
 settings.MakeVideo = 1;
-% settings.FramesToRecord = 100;
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'hangingClothStillTwoPin';
 settings.addShellNormalDeformation = 1;
 settings.addBendingEnergy = true;
 settings.campos=[5,5,0];
-% settings.PCGiterations = 50;
-% settings.quicksolveSimulation = true;
 settings.recomputeCacheAinv = true;
 settings.PlotEdotVsCurvatureHists = true;
 settings.RigidificationEnabled = false;

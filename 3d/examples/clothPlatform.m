@@ -119,7 +119,7 @@ settings.campos=[5,5,2];
 settings.PGSiterations = 15;
 settings.addBendingEnergy = true;
 settings.PlotSkip = scaleFactor;
-settings.useGrinspunPlanarEnergy = true; %ATTENTION HERE, this is likely fine due to the bottle being always rigid, but other elastic/mixed scenes would need compatibility to be implemented!!!!!!!!!!!!!!!!!!
+settings.useGrinspunPlanarEnergy = true;
 
 % td = simulate3D({mesh3Dnr,mesh3Da},h,contactFinder, {integrator,integrator2}, {rigidificator,rigidificator2}, settings, energyModel, animScripted );
 td = simulate3D({mesh3Da},h,contactFinder, {integrator}, {rigidificator}, settings, energyModel, animScripted );

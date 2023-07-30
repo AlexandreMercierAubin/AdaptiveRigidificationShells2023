@@ -22,7 +22,6 @@ tMaterial = [TriangleMaterial(rho, mu, lambda, alpha0, alpha1, [0.3,0.46,0.8],st
 
 resetMesh = true;
 baseMesh = shellOBJLoader('bunnyMed',[],tMaterial,[1,1,1],resetMesh,settings);
-% generateCloth([], tMaterial, 0.1);
 baseMesh.setRigidTransform([90,0,0],[0,0,0.3],true);
 
 % pinning tris
@@ -38,19 +37,15 @@ integrator.Gravity = -9.8;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h,0,0);
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
-% energyModel = NeoHookean3DEnergy();
 
 planeContactFinder = PlaneContactFinder3D([0,0,1], [0,0,-0.2], 0.7);
 contactFinder = {planeContactFinder};
 
 settings.MakeVideo = 1;
 settings.FramesToRecord = 15/h;
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'clothBunnyGround';
 settings.WriteOBJs = true;
 settings.OBJDir = './objs/clothBunnyGround/';
-% settings.addShellNormalDeformation = 1;
 settings.campos=[5,5,.5];
 settings.StrainLimitingEnabled = true;
 settings.addBendingEnergy = 1;

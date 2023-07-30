@@ -33,13 +33,7 @@ mesha = AdaptiveMesh3D(mesh);
 mesha.renderOffset = [0,0,0];
 
 rigidificator = ECurvCloth3DRigidificator();
-%standard
-% rigidificator.RigidificationThreshold = 1e-2;
-% rigidificator.ElastificationThreshold = 1e-1; 
-% rigidificator.RigidificationBendThreshold = 1e-1;
-% rigidificator.ElastificationBendThreshold = 1e-0;
 
-%SLimit
 rigidificator.RigidificationThreshold = 7e-2;
 rigidificator.ElastificationThreshold = 7e-1; 
 rigidificator.RigidificationBendThreshold = 5e-1;
@@ -47,18 +41,10 @@ rigidificator.ElastificationBendThreshold = 2e-0;
 
 
 integrator = LDLBackwardEuler3D();
-% integrator = BackwardEuler3D();
-% integrator = FullNewton3D();
-% integrator.maxIterations = 5;
-% integrator.useFullAinv = true;
 integrator.Gravity = -9.8;
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.0,0.0 );
-% integrator.projectToSPD = true;
-% integrator.useFullAinv = true;
-% energyModel = StVenantKirchoff3DEnergy();
 energyModel = NeoHookean3DEnergy();
 integrator.useQuicksolveContactFilter = 4;
-% energyModel = CorotationalEnergy();
 
 sphereContactFinder = SphereContactFinder(0.7, [0,-1,-0.3], 0.8);
 sphereContactFinder.plotRatio = 0.95;
@@ -73,19 +59,14 @@ contactFinder = {sphereContactFinder,sphereContactFinder2,sphereContactFinder3,s
 settings.MakeVideo = 1;
 settings.FramesToRecord = 11/h;
 
-% settings.InitialWindowPosition = [0,0,1920,1080];
 settings.SceneName = 'clothMultiSphere';
-% settings.WriteOBJs = true;
 settings.OBJDir = './objs/clothMultiSphere/';
 settings.campos=[5,5,2];
 settings.PGSiterations = 10;
-% settings.quicksolveSimulation = true;
 settings.addBendingEnergy = true;
 
-% settings.RigidificationEnabled = false;
 settings.recomputeCacheAinv = true;
 settings.PlotEdotVsCurvatureHists = true;
-% settings.PlotEDotHist = 1;
 settings.PlotSkip = plotSkip60FPS(h);
 settings.StrainLimitingEnabled = 1;% mexed strain limiting. Use 1 instead if you didn't mex mexStrainLimiting
 settings.useGrinspunPlanarEnergy = true;

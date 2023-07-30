@@ -55,8 +55,6 @@ meshHD.setRigidTransform([0,90,-90],[0,0,0]);
 meshHD.renderOffset=[1.1,0,0];
 meshaHD = AdaptiveMesh3D(meshHD);
 
-% Et = 5e-2;
-% Rt = 5e-3;
 Et = 999999;
 Rt = 999999;
 Eb = 5e-2;

@@ -24,10 +24,8 @@ kl = 3;
 tMaterial = [TriangleMaterial(rho, mu, lambda, alpha0, alpha1,[0.2,0,0.5], strainUpperBound, strainLowerBound,thickness,kl,ka,bendingAlpha)];
 
 settings.recomputeCacheAinv = true;
-% settings.renderer = 'painters';
 
 clothDimensions = [2.7,1.2];
-% resolution = 0.025;
 resolution = 0.1;
 mesh3D = generateCloth([], tMaterial, resolution,[1,1,1],clothDimensions);
 

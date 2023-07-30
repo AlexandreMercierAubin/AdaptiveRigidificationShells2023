@@ -84,8 +84,6 @@ dofs = [min_I*3-2;max_I*3-2];
 halfSize= size(dofs,1);
 dofsCompress = [min_I*3-1;max_I*3-1];
 dofs = [dofs;dofsCompress];
-%shrink the pinned dofs a little
-% baseMesh.p(dofs+1) = baseMesh.p(dofs+1)*0.9995;
 
 %creates the animated ends
 compressFactor = 1;
@@ -95,7 +93,6 @@ entries = 0.5/h;% hang in the air
 start = 0.0/h;
 
 posDelta = 3.5;
-% posDelta = 0;
 stackPosChange = [min_I*0-posDelta;max_I*0+posDelta];
 compressionDelta = (posInit((halfSize+1):end)*compressFactor - posInit((halfSize+1):end));
 counter = 1;
@@ -196,24 +193,15 @@ energyModel = StVenantKirchoff3DEnergy();
 contactFinder = {};
 
 settings.MakeVideo = 1;
-% settings.PlotSkip = multiplyer-1;
 settings.FramesToRecord = 3/h;
 settings.PlotSkip = plotSkip60FPS(h);
-% settings.PlotEDotHist = 1;
-% settings.InitialWindowPosition = [0,0,1920,1080];
 settings.SceneName = 'clothStretchCond';
 settings.WriteOBJs = true;
 settings.OBJDir = './objs/clothStretchCond/';
-% settings.addShellNormalDeformation = 1;
-% settings.StrainLimitingEnabled = true;
 settings.campos=[7,10,3]*4;
 settings.camLightPosition = 'left';
-% settings.PCGiterations = 200;
-% settings.quicksolveSimulation = true;
 settings.addBendingEnergy = true;
-% settings.RigidificationEnabled = false;
 settings.useGrinspunPlanarEnergy = true;
-% settings.camLightStyle = 'local';
 settings.StrainLimitingEnabled = true;
 settings.recomputeCacheAinv = true;
 

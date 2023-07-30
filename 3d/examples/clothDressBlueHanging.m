@@ -32,31 +32,19 @@ meshes = AdaptiveMesh3D(baseMesh);
 rigidificator = EDotClothRigidificator();
 rigidificator.RigidificationThreshold = 1e-4;
 rigidificator.ElastificationThreshold = 1e-3; 
-% integrator = FullNewton3D();
 integrator = LDLBackwardEuler3D();
-% integrator = symplectic3D();
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0.1,0.1 );
-% integrator.projectToSPD = true;
 energyModel = NeoHookean3DEnergy();
-% energyModel = StVenantKirchoff3DEnergy();
 
 frictionCoeff = 0.3;
 
 settings.MakeVideo = 1;
 settings.SceneName = 'dressblueHanging';
-% settings.FramesToRecord = 300;
 settings.PGSiterations = 20;
-% settings.quicksolveSimulation = true;
 settings.campos=[-3.5,-3.5,0.35];
 settings.camtarget = [0,0,0.1];
-% settings.RigidificationEnabled = false;
-% settings.recomputeCacheAinv = true;
 settings.renderer = 'opengl';
 settings.camLightPosition = 'headlight';
-% settings.PlotSkip = plotSkip60FPS(h);
-% settings.addBendingEnergy = true;
-% settings.InitialWindowPosition = [0, 0, 1920, 1080];
-% settings.addShellNormalDeformation = true;
 settings.useGrinspunPlanarEnergy = true;
 
 td = simulate3D({baseMesh},h,NullContactFinder(), integrator, rigidificator, settings, energyModel);

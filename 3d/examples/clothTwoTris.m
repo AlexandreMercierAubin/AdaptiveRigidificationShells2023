@@ -30,16 +30,10 @@ baseMesh = Mesh3D(V,T,[],tMaterial,T,J,[],[],[],[]);
 
 %add some bending
 baseMesh.p(2)=1;
-% baseMesh.pin([2;3]);
 baseMesh.pin([1;2;3]);
-% baseMesh.pin([1;4]);
-% baseMesh.pin([1]);
-
-% baseMesh.setRigidTransform([0,90,0],[0,0,0], true);
 
 meshes = AdaptiveMesh3D(baseMesh);
 
-% rigidificator = EDotClothRigidificator();
 rigidificator = ECurvCloth3DRigidificator();
 rigidificator.RigidificationThreshold = 1e-3;
 rigidificator.ElastificationThreshold = 2e-3; 
@@ -51,21 +45,16 @@ integrator.useLineSearch = false;
 integrator.Gravity = 0;
 
 energyModel = StVenantKirchoff3DEnergy();
-% energyModel = CorotationalEnergy();
 
 NullContactFinder = NullContactFinder(3);
 contactFinder = {NullContactFinder};
 
-% settings.StrainLimitingEnabled = true;
 settings.RigidificationEnabled = false;
 settings.MakeVideo = 1;
-% settings.FramesToRecord = 100;
-% settings.PlotEDotHist = 1;
 settings.SceneName = 'twoTris3D';
 settings.addShellNormalDeformation = 1;
 settings.addBendingEnergy = true;
 settings.campos=[5,10,8];
 settings.recomputeCacheAinv = true;
 settings.DrawForces = true;
-% settings.PlotSkip = 10;
 simulate3D(meshes,h,contactFinder, {integrator2}, rigidificator, settings, energyModel);

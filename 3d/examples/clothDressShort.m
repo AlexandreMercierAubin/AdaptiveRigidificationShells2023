@@ -51,8 +51,6 @@ tMaterial= [tMaterial1,tMaterial2,tMaterial3];
 resetMesh = true;
 mesh3D = shellOBJLoader('dressyellowCoarse',[],tMaterial,[1,1,1],resetMesh,settings);
 
-% mesh3D.setRigidTransform([0,0,0],[0.185,-0.37,0.01],true);
-
 v = reshape(mesh3D.p,3,[]);
 n1 = v( :, mesh3D.t(:,1) );
 n2 = v( :, mesh3D.t(:,2) );
@@ -74,14 +72,11 @@ mesh3Da = AdaptiveMesh3D(mesh3D);
 rigidificator = ECurvCloth3DRigidificator();
 rigidificator.RigidificationThreshold = 1e-2;
 rigidificator.ElastificationThreshold = 1e-1; 
-% rigidificator.setBendingThresholdsFromPlanar();
 rigidificator.RigidificationBendThreshold = 20;
 rigidificator.ElastificationBendThreshold = 200;
-% integrator = FullNewton3D();
 integrator = LDLBackwardEuler3D();
 integrator.setComplianceAndBaumgarteFromERPandCFM(h, 0,0);
 energyModel = NeoHookean3DEnergy();
-% energyModel = StVenantKirchoff3DEnergy();
 
 animContactFinder = AnimatedObjectContactDetector('./3d/data/AnimationData/dance.mot','./3d/data/AnimationData/female-objs/',[-90, 0, 0],[1,1,1],[0, 0, -1],0.9,h);
 animContactFinder.plotScale = 0.96;
@@ -98,30 +93,21 @@ durations([7]) = floor(1/h);
 durations([8]) = floor(1.2/h);
 animContactFinder.injectPause(framePause,durations);
 animContactFinder.stopFrame = (9/h)+sum(durations);
-% animContactFinder.stopFrame = 1;
-% animContactFinder.skipdetection = true;
-contactFinder = {animContactFinder};% 
+contactFinder = {animContactFinder};
 
 settings.MakeVideo = 1;
 settings.SceneName = 'dressShortDefault';
-% settings.WriteOBJs = true;
 settings.OBJDir = './objs/dressShortDefault/';
 settings.FramesToRecord = (10/h)+sum(durations);
 settings.PGSiterations = 25;
-% settings.quicksolveSimulation = true;
 settings.campos=[-5,-5,0.4];
 settings.camtarget = [0,0,0.15];
-% settings.RigidificationEnabled = false;
 settings.recomputeCacheAinv = true;
 settings.renderer = 'opengl';
 settings.camLightPosition = 'headlight';
 settings.PlotSkip = plotSkip60FPS(h);
 settings.addBendingEnergy = true;
-% settings.addShellNormalDeformation = true;
-% settings.InitialWindowPosition = [0, 0, 1920, 1080];
 settings.useGrinspunPlanarEnergy =true;
-% settings.StrainLimitingEnabled =true;
-% settings.RunRightAway = false;
 
 td = simulate3D({mesh3Da},h,contactFinder, integrator, rigidificator, settings, energyModel);
 save("clothDressShort_default"+datestr(now,'mm-dd-yyyy_HH-MM')+".mat", 'td');

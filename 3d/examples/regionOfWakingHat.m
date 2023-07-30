@@ -129,10 +129,6 @@ axis off;
 
 impulseVertIDs = [152,1101];
 impulse = [0.05,0.05];
-% phi = [-1;
-%   -0.00098398];
-% phi = [-0.0023342;
-%   -0.00098398];
 impulsePhi = 0.000; %positive phi so it deformes a tiny bit when gravity is factored in
 phi = [impulsePhi;
   impulsePhi];

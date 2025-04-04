@@ -1,6 +1,6 @@
 # Using and Making Tetrahedral Meshes
 
-This directory contains a nubmer of 3D triangular and tetrahedral meshes.
+This directory contains a number of 3D triangular and tetrahedral meshes.
 The puprpose of this document is to give a general guide for successful 
 mesh creation.
 
